@@ -1,5 +1,5 @@
 // Guarda o app no celular para abrir sem internet.
-const VERSAO = 'rota-v1';
+const VERSAO = 'rota-v2';
 const ARQUIVOS = ['./', './index.html', './app.js', './config.js', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(VERSAO).then(c => c.addAll(ARQUIVOS))); self.skipWaiting(); });
 self.addEventListener('activate', e => {

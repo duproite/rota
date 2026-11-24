@@ -223,6 +223,12 @@ nav.tabs .badge{position:absolute;top:8px;left:calc(50% + 6px);background:var(--
   <section class="view" id="v-setup" hidden>
     <h2 id="setupTit">Falta configurar</h2>
     <div class="status"><p id="setupTxt"></p></div>
+    <div class="field" id="setupKey">
+      <label class="label" for="keyIn">Link de instalação ou chave</label>
+      <input class="input" id="keyIn" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Cole aqui o link que o Du mandou">
+      <div class="err" id="keyErr" role="alert"></div>
+    </div>
+    <button class="btn" id="keySave" type="button">Salvar e entrar</button>
     <button class="btn" id="setupRetry" type="button">Tentar de novo</button>
   </section>
 

@@ -26,7 +26,7 @@ const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } cat
   const m = location.hash.match(/k=([A-Za-z0-9]+)/);
   if (m) { try { localStorage.setItem(KEY.chave, m[1]); } catch (e) {} history.replaceState(null, '', location.pathname); }
 })();
-const chave = (() => { try { return localStorage.getItem(KEY.chave) || ''; } catch (e) { return ''; } })();
+let chave = (() => { try { return localStorage.getItem(KEY.chave) || ''; } catch (e) { return ''; } })();
 
 // ---------- estado ----------
 let DADOS = load(KEY.dados, null);          // {geradoEm, baixadoEm, clientes, lanc, precos}
@@ -139,11 +139,22 @@ function renderSetup() {
   const semConfig = !API || !chave;
   $('#setupTit').textContent = semConfig ? 'Falta configurar' : 'Precisa de internet';
   $('#setupTxt').textContent = semConfig
-    ? 'Abra este app pelo link de instalação que o Du mandou. Ele já vem com a chave de acesso.'
+    ? 'Cole abaixo o link de instalação que o Du mandou (ou só a chave). É só na primeira vez.'
     : (ultimoErro === 'chave' ? 'A chave de acesso não foi aceita. Peça o link de instalação de novo ao Du.'
       : 'Na primeira vez o app precisa de sinal para baixar os clientes e os preços. Depois funciona sem internet.');
   $('#setupRetry').hidden = semConfig;
+  $('#setupKey').hidden = !semConfig && ultimoErro !== 'chave';
+  $('#keySave').hidden = $('#setupKey').hidden;
 }
+$('#keySave').onclick = () => {
+  const v = $('#keyIn').value.trim();
+  const m = v.match(/k=([A-Za-z0-9]+)/) || v.match(/^([A-Za-z0-9]{12,})$/);
+  if (!m) { $('#keyErr').textContent = 'Não reconheci. Cole o link inteiro que o Du mandou.'; return; }
+  chave = m[1];
+  try { localStorage.setItem(KEY.chave, chave); } catch (e) {}
+  $('#keyErr').textContent = ''; ultimoErro = '';
+  renderSetup(); sincronizar(true);
+};
 $('#setupRetry').onclick = () => sincronizar(true);
 
 // ---------- LANÇAR ----------
